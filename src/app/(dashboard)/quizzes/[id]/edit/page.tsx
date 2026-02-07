@@ -86,7 +86,7 @@ export default async function QuizEditorPage(props: { params: Promise<{ id: stri
                         <CardContent>
                             <QuestionsEditor
                                 quizId={quiz.id}
-                                questions={quiz.questions.map(q => ({ ...q, id: q.id, text: q.text, optionA: q.optionA, optionB: q.optionB, axisKey: q.axisKey, weight: q.weight, aSide: q.aSide }))}
+                                questions={quiz.questions.map((q: any) => ({ ...q, id: q.id, text: q.text, optionA: q.optionA, optionB: q.optionB, axisKey: q.axisKey, weight: q.weight, aSide: q.aSide }))}
                             />
                         </CardContent>
                     </Card>
@@ -101,7 +101,7 @@ export default async function QuizEditorPage(props: { params: Promise<{ id: stri
                         <CardContent>
                             <ResultsEditor
                                 quizId={quiz.id}
-                                results={quiz.resultTypes.map(r => ({ ...r, id: r.id, code: r.code, name: r.name, descriptionShort: r.descriptionShort ?? undefined, descriptionLong: r.descriptionLong ?? undefined }))}
+                                results={quiz.resultTypes.map((r: any) => ({ ...r, id: r.id, code: r.code, name: r.name, descriptionShort: r.descriptionShort ?? undefined, descriptionLong: r.descriptionLong ?? undefined }))}
                             />
                         </CardContent>
                     </Card>
