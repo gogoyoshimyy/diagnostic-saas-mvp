@@ -56,7 +56,7 @@ export async function GET(req: NextRequest, props: { params: Promise<{ slug: str
                 height: 1920,
             }
         );
-    } catch (e: any) {
+    } catch {
         return new Response(`Failed to generate image`, {
             status: 500,
         });

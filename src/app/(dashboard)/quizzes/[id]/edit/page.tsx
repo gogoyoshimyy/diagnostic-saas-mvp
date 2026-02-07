@@ -32,6 +32,12 @@ export default async function QuizEditorPage(props: { params: Promise<{ id: stri
         notFound()
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const questions = quiz.questions.map((q: any) => ({ ...q, id: q.id, text: q.text, optionA: q.optionA, optionB: q.optionB, axisKey: q.axisKey, weight: q.weight, aSide: q.aSide }))
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const results = quiz.resultTypes.map((r: any) => ({ ...r, id: r.id, code: r.code, name: r.name, descriptionShort: r.descriptionShort ?? undefined, descriptionLong: r.descriptionLong ?? undefined }))
+
     return (
         <div className="container mx-auto py-6 px-4 max-w-5xl">
             <div className="flex items-center justify-between mb-6">
@@ -86,7 +92,7 @@ export default async function QuizEditorPage(props: { params: Promise<{ id: stri
                         <CardContent>
                             <QuestionsEditor
                                 quizId={quiz.id}
-                                questions={quiz.questions.map((q: any) => ({ ...q, id: q.id, text: q.text, optionA: q.optionA, optionB: q.optionB, axisKey: q.axisKey, weight: q.weight, aSide: q.aSide }))}
+                                questions={questions}
                             />
                         </CardContent>
                     </Card>
@@ -101,7 +107,7 @@ export default async function QuizEditorPage(props: { params: Promise<{ id: stri
                         <CardContent>
                             <ResultsEditor
                                 quizId={quiz.id}
-                                results={quiz.resultTypes.map((r: any) => ({ ...r, id: r.id, code: r.code, name: r.name, descriptionShort: r.descriptionShort ?? undefined, descriptionLong: r.descriptionLong ?? undefined }))}
+                                results={results}
                             />
                         </CardContent>
                     </Card>

@@ -16,6 +16,7 @@ const UpdateBasicSchema = z.object({
     slug: z.string().min(1, "スラッグは必須です"),
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function updateBasic(quizId: string, prevState: any, formData: FormData) {
     const session = await auth()
     if (!session?.user?.id) {
@@ -56,7 +57,7 @@ export async function updateBasic(quizId: string, prevState: any, formData: Form
 
         revalidatePath(`/quizzes/${quizId}/edit`)
         return { message: "更新しました", errors: {} }
-    } catch (e) {
+    } catch {
         return { message: "更新に失敗しました", errors: {} }
     }
 }
@@ -73,6 +74,7 @@ const UpdateQuestionSchema = z.object({
     optionB: z.string().min(1, "選択肢Bは必須です"),
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function updateQuestion(quizId: string, prevState: any, formData: FormData) {
     const session = await auth()
     if (!session?.user?.id) return { message: "Unauthorized", errors: {} }
@@ -103,7 +105,7 @@ export async function updateQuestion(quizId: string, prevState: any, formData: F
 
         revalidatePath(`/quizzes/${quizId}/edit`)
         return { message: "更新しました", errors: {} }
-    } catch (e) {
+    } catch {
         return { message: "更新失敗", errors: {} }
     }
 }
@@ -119,6 +121,7 @@ const UpdateResultSchema = z.object({
     description: z.string().optional(),
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function updateResultType(quizId: string, prevState: any, formData: FormData) {
     const session = await auth()
     if (!session?.user?.id) return { message: "Unauthorized", errors: {} }
@@ -147,7 +150,7 @@ export async function updateResultType(quizId: string, prevState: any, formData:
 
         revalidatePath(`/quizzes/${quizId}/edit`)
         return { message: "更新しました", errors: {} }
-    } catch (e) {
+    } catch {
         return { message: "更新失敗", errors: {} }
     }
 }

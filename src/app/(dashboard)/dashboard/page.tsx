@@ -45,6 +45,7 @@ export default async function DashboardPage() {
                 </div>
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                     {quizzes.map((quiz: any) => (
                         <Card key={quiz.id} className="hover:shadow-md transition-shadow">
                             <CardHeader>
