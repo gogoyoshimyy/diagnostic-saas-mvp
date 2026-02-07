@@ -1,0 +1,201 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+// Auth.js Models
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  quizzes       Quiz[]    @relation("CreatedQuizzes")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// App Models
+
+enum QuizStatus {
+  DRAFT
+  PUBLIC
+  UNLISTED
+  PRIVATE
+}
+
+model Quiz {
+  id                String     @id @default(cuid())
+  slug              String     @unique
+  title             String
+  description       String?
+  status            QuizStatus @default(DRAFT)
+  theme             String? // Visual theme (e.g. "neon", "pastel")
+  promoCardTemplate String     @default("simple") // "simple" | "cute" | "luxury"
+
+  creatorId String
+  creator   User   @relation("CreatedQuizzes", fields: [creatorId], references: [id])
+
+  axes            Axis[]
+  questions       Question[]
+  resultTypes     ResultType[]
+  shareAssets     ShareAsset[]
+  recommendations Recommendation[]
+  // Responses dropped or kept minimal/sampling? 
+  // User requested "minimize or sampling". We keep the relation but will be careful.
+  responses       Response[] 
+  dailyStats      QuizDailyStat[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Axis {
+  id         String @id @default(cuid())
+  quizId     String
+  key        String // e.g. "score_A", "axis_1"
+  leftLabel  String
+  rightLabel String
+  quiz       Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([quizId, key])
+}
+
+model Question {
+  id      String @id @default(cuid())
+  quizId  String
+  text    String
+  optionA String
+  optionB String
+  axisKey String // Which axis this question affects
+  aSide   Boolean @default(true) 
+  weight  Int    @default(1)
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model ResultType {
+  id               String @id @default(cuid())
+  quizId           String
+  code             String // e.g. "TYPE_A"
+  name             String
+  tagline          String?
+  descriptionShort String?
+  descriptionLong  String?
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+enum ShareAssetKind {
+  SUBCOPY
+  SHARETEXT
+  // PROMO_CARD removed as content is dynamic. 
+  // Optional: keep it if we want to store specific *customized* texts for the card that differ from subcopy.
+  // But for MVP, card uses selected subcopy.
+}
+
+model ShareAsset {
+  id        String         @id @default(cuid())
+  quizId    String
+  kind      ShareAssetKind
+  variant   String? // "simple", "cute" or "short", "polite"
+  content   String // The text content
+  selected  Boolean        @default(false)
+  
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Recommendation {
+  id          String   @id @default(cuid())
+  quizId      String
+  title       String
+  description String?
+  url         String?
+  imageUrl    String?
+  priority    Int      @default(0)
+
+  conditions  RecommendationCondition[]
+  quiz        Quiz                      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model RecommendationCondition {
+  id               String         @id @default(cuid())
+  recommendationId String
+  axisKey          String
+  threshold        Int 
+  operator         String         @default("gte")
+
+  recommendation Recommendation @relation(fields: [recommendationId], references: [id], onDelete: Cascade)
+}
+
+model Response {
+  id             String   @id @default(cuid())
+  quizId         String
+  resultCode     String?
+  // axisScoresJson String // Removed to save space if needed, or keep for simple logs
+  createdAt      DateTime @default(now())
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+}
+
+model QuizDailyStat {
+  id            String   @id @default(cuid())
+  quizId        String
+  date          String   // YYYY-MM-DD
+  
+  views         Int      @default(0)
+  starts        Int      @default(0)
+  completes     Int      @default(0)
+  shareCopy     Int      @default(0)
+  promoGenerate Int      @default(0)
+  recoClick     Int      @default(0)
+
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([quizId, date])
+}
