@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import QuizStartButton from "./QuizStartButton";
 
 // Requirement: Fetch from API
 async function getQuizData(slug: string) {
@@ -73,9 +74,7 @@ export default async function QuizPublicPage(props: { params: Promise<{ slug: st
                 </div>
 
                 <div className="space-y-4">
-                    <button className="w-full py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition">
-                        Start Diagnosis
-                    </button>
+                    <QuizStartButton slug={quiz.slug} />
                 </div>
 
             </div>
