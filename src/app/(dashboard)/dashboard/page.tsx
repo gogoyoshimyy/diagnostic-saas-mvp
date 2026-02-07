@@ -45,7 +45,7 @@ export default async function DashboardPage() {
                 </div>
             ) : (
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                    {quizzes.map((quiz) => (
+                    {quizzes.map((quiz: any) => (
                         <Card key={quiz.id} className="hover:shadow-md transition-shadow">
                             <CardHeader>
                                 <div className="flex justify-between items-start">
