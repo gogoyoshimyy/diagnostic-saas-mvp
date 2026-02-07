@@ -45,14 +45,16 @@ export default async function QuizStartPage({ params }: { params: Promise<{ slug
 
                                 {/* Display options */}
                                 <div className="space-y-3">
-                                    {quiz.questions[0].options.map((option: any, index: number) => (
-                                        <button
-                                            key={index}
-                                            className="w-full p-4 text-left bg-white border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
-                                        >
-                                            {option.text}
-                                        </button>
-                                    ))}
+                                    <button
+                                        className="w-full p-4 text-left bg-white border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
+                                    >
+                                        {quiz.questions[0].optionA}
+                                    </button>
+                                    <button
+                                        className="w-full p-4 text-left bg-white border-2 border-gray-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition"
+                                    >
+                                        {quiz.questions[0].optionB}
+                                    </button>
                                 </div>
                             </div>
 
