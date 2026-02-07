@@ -7,12 +7,10 @@ const authToken = process.env.TURSO_AUTH_TOKEN
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
-const turso = createClient({
+const adapter = new PrismaLibSql({
     url: connectionString!,
     authToken: authToken,
 })
-
-const adapter = new PrismaLibSql(turso)
 
 export const prisma = globalForPrisma.prisma || new PrismaClient({ adapter })
 
