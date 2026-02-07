@@ -29,9 +29,12 @@ export default async function PublishPage(props: { params: Promise<{ id: string 
     const publicUrl = `${process.env.NEXT_PUBLIC_APP_URL}/q/${quiz.slug}`
 
     // Identify assets
-    const subcopies = quiz.shareAssets.filter(a => a.kind === "SUBCOPY");
-    const shareTexts = quiz.shareAssets.filter(a => a.kind === "SHARETEXT");
-    const selectedSubcopy = subcopies.find(a => a.selected) || subcopies[0];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const subcopies = quiz.shareAssets.filter((a: any) => a.kind === "SUBCOPY");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const shareTexts = quiz.shareAssets.filter((a: any) => a.kind === "SHARETEXT");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const selectedSubcopy = subcopies.find((a: any) => a.selected) || subcopies[0];
 
     // Promo card URL (dynamic)
     const promoCardUrl = `/api/q/${quiz.slug}/promo-card?title=${encodeURIComponent(quiz.title)}&subcopy=${encodeURIComponent(selectedSubcopy?.content || "")}`
