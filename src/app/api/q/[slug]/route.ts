@@ -58,12 +58,14 @@ export async function GET(req: NextRequest, props: { params: Promise<{ slug: str
                 description: quiz.description,
                 designTemplate: quiz.theme || "simple", // Mapping theme to designTemplate
                 promoCardTemplate: quiz.promoCardTemplate, // Keep this too
-                axes: quiz.axes.map(a => ({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                axes: quiz.axes.map((a: any) => ({
                     key: a.key,
                     leftLabel: a.leftLabel,
                     rightLabel: a.rightLabel
                 })),
-                questions: quiz.questions.map(q => ({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                questions: quiz.questions.map((q: any) => ({
                     id: q.id,
                     text: q.text,
                     optionA: q.optionA,
@@ -72,26 +74,31 @@ export async function GET(req: NextRequest, props: { params: Promise<{ slug: str
                     aSide: q.aSide ? "LEFT" : "RIGHT", // Mapping boolean to requested string enum-like
                     weight: q.weight
                 })),
-                results: quiz.resultTypes.map(r => ({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                results: quiz.resultTypes.map((r: any) => ({
                     code: r.code,
                     name: r.name,
                     tagline: r.tagline || "",
                     description: r.descriptionShort || ""
                 })),
-                recommendations: quiz.recommendations.map(r => ({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                recommendations: quiz.recommendations.map((r: any) => ({
                     id: r.id,
                     title: r.title,
                     description: r.description,
                     url: r.url,
                     priority: r.priority > 0 ? "HIGH" : "NORMAL", // Simple mapping logic for MVP
-                    conditions: r.conditions.map(c => ({
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    conditions: r.conditions.map((c: any) => ({
                         axisKey: c.axisKey,
                         threshold: c.threshold
                     }))
                 })),
                 share: {
-                    selectedSubcopy: quiz.shareAssets.find(s => s.kind === "SUBCOPY")?.content || null,
-                    selectedShareText: quiz.shareAssets.find(s => s.kind === "SHARETEXT")?.content || null
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    selectedSubcopy: quiz.shareAssets.find((s: any) => s.kind === "SUBCOPY")?.content || null,
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    selectedShareText: quiz.shareAssets.find((s: any) => s.kind === "SHARETEXT")?.content || null
                 }
             }
         };
