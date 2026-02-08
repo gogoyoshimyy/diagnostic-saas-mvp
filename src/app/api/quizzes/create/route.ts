@@ -36,7 +36,46 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const { topic } = await req.json();
+        const body = await req.json();
+
+        // Support both new and legacy payload formats
+        let topic: string;
+        let quizTitle: string;
+
+        if (body.selectedTags && body.title) {
+            // New format: category-based
+            const { selectedTags, primaryTag, title, purpose, tone, target } = body;
+
+            // Build topic from title and primary tag for AI prompt
+            const categoryContext = primaryTag ? `（カテゴリ: ${primaryTag}）` : '';
+
+            // Purpose Context
+            let purposeContext = '';
+            if (purpose?.selected?.length > 0) {
+                purposeContext = `\n目的: ${purpose.selected.join(', ')}${purpose.note ? ` (${purpose.note})` : ''}`;
+            }
+
+            // Tone Context
+            let toneContext = '';
+            if (tone?.design || tone?.writing) {
+                toneContext = '\n雰囲気:';
+                if (tone.design) toneContext += ` デザイン=${tone.design}`;
+                if (tone.writing) toneContext += ` 文章=${tone.writing}`;
+            }
+
+            // Target Context
+            let targetContext = '';
+            if (target?.tags?.length > 0) {
+                targetContext = `\n対象: ${target.tags.join(', ')}${target.note ? ` (${target.note})` : ''}`;
+            }
+
+            topic = `${title}${categoryContext}${purposeContext}${toneContext}${targetContext}`;
+            quizTitle = title;
+        } else {
+            // Legacy format: simple topic
+            topic = body.topic;
+            quizTitle = body.topic || "Untitled Quiz";
+        }
 
         // 1. Create Shell
         // Slug generation: simplistic nano id for MVP uniqueness
@@ -44,7 +83,7 @@ export async function POST(req: NextRequest) {
 
         const quiz = await prisma.quiz.create({
             data: {
-                title: topic || "Untitled Quiz",
+                title: quizTitle,
                 slug: slug,
                 creatorId: session.user.id,
                 status: "DRAFT",
