@@ -53,8 +53,7 @@ export default function LoginPage() {
                                 id="debug-email"
                                 name="email"
                                 type="email"
-                                placeholder="debug@example.com"
-                                required
+                                defaultValue="debug@example.com"
                                 className="bg-white"
                             />
                         </div>
