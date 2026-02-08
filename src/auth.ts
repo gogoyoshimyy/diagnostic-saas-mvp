@@ -9,10 +9,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     ...authConfig,
     adapter: PrismaAdapter(prisma),
     providers: [
-        Resend({
-            from: process.env.EMAIL_FROM,
-        }),
-        // Debug Provider for Development
+        // Debug Provider for Development (always available)
         Credentials({
             name: "Debug Login",
             credentials: {
@@ -35,7 +32,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 }
                 return user;
             }
-        })
+        }),
+        // Only include Resend if EMAIL_FROM is configured
+        ...(process.env.EMAIL_FROM ? [
+            Resend({
+                from: process.env.EMAIL_FROM,
+            })
+        ] : [])
     ],
     session: { strategy: "jwt" }, // Switch to JWT to support Credentials
 })
