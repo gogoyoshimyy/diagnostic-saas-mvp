@@ -65,11 +65,11 @@ export default async function QuizPublicPage(props: { params: Promise<{ slug: st
 
                 {/* MVP Placeholder for Interaction */}
                 <div className="p-4 bg-blue-50 text-blue-800 rounded mb-4">
-                    <p className="font-semibold">Quiz Details (MVP Debug View)</p>
+                    <p className="font-semibold">診断詳細（開発版）</p>
                     <ul className="list-disc ml-5 mt-2 text-sm">
-                        <li>Status: {quiz.status}</li>
-                        <li>Questions: {quiz.questions.length}</li>
-                        <li>Results: {quiz.results.length}</li>
+                        <li>公開状態: {quiz.status}</li>
+                        <li>質問数: {quiz.questions.length}</li>
+                        <li>結果タイプ: {quiz.results.length}</li>
                     </ul>
                 </div>
 
@@ -81,7 +81,7 @@ export default async function QuizPublicPage(props: { params: Promise<{ slug: st
 
             {/* Footer / Debug */}
             <div className="mt-8 text-xs text-gray-400">
-                Template: {quiz.designTemplate} | Slug: {quiz.slug}
+                テンプレート: {quiz.designTemplate} | スラッグ: {quiz.slug}
             </div>
         </div>
     );
