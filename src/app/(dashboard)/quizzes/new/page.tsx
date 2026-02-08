@@ -52,7 +52,7 @@ const initialState: QuizCreationState = {
     isDialogOpen: false,
     title: "",
     purpose: {
-        selected: ["拡散"], // Default value
+        selected: ["🚀 盛り上げたい"], // Default value with emoji
         note: "",
     },
     tone: {

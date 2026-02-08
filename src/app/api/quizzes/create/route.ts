@@ -101,7 +101,9 @@ export async function POST(req: NextRequest) {
                 4. "results": array of 8 objects with { "code", "name", "description" }
                 5. "questions": array of 10 objects with { "text", "optionA", "optionB", "axis", "weight" (1), "aSide" (true/false) }
                 
-                Ensure all keys are present. "axis" in question must match one of the "axes" keys.
+                Ensure all keys are present.
+                CRITICAL: The "axis" field in each question MUST EXACTLY match one of the "key" values defined in the "axes" array.
+                CRITICAL: "aSide": true means optionA corresponds to the "leftLabel" of the axis. false means optionA corresponds to "rightLabel".
             `;
 
             const draft = await generateStructured(prompt, DraftSchema);
