@@ -15,7 +15,7 @@ export default function QuizStartButton({ slug }: { slug: string }) {
             onClick={handleStart}
             className="w-full py-3 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition"
         >
-            Start Diagnosis
+            診断を開始する
         </button>
     );
 }
