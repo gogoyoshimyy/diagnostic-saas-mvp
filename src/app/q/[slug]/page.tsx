@@ -63,16 +63,6 @@ export default async function QuizPublicPage(props: { params: Promise<{ slug: st
                 <h1 className="text-2xl font-bold text-gray-900 mb-2">{quiz.title}</h1>
                 <p className="text-gray-600 mb-6">{quiz.description}</p>
 
-                {/* MVP Placeholder for Interaction */}
-                <div className="p-4 bg-blue-50 text-blue-800 rounded mb-4">
-                    <p className="font-semibold">診断詳細（開発版）</p>
-                    <ul className="list-disc ml-5 mt-2 text-sm">
-                        <li>公開状態: {quiz.status}</li>
-                        <li>質問数: {quiz.questions.length}</li>
-                        <li>結果タイプ: {quiz.results.length}</li>
-                    </ul>
-                </div>
-
                 <div className="space-y-4">
                     <QuizStartButton slug={quiz.slug} />
                 </div>
